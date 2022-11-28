@@ -107,7 +107,7 @@ int main()
         printf("cannot connect to server!\n");
         close(sock_desc);
     }
-    printf("\nconnected\n");
+    printf("connected\n\n");
 
     if (pid1 > 0 && 0 < pid2)
     {
