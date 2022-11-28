@@ -5,6 +5,8 @@
 #include <stdlib.h>  
 #include <arpa/inet.h> 
 #include <unistd.h> 
+#include <signal.h>
+#include <time.h>
 
 char *body_mass_index(char *buffer) {
     float vyska_cm, vaha, bmi, vyska_m, vyska_2;
