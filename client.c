@@ -59,12 +59,12 @@ int main()
     client.sin_addr.s_addr = inet_addr("127.0.0.1");
     client.sin_port = htons(6838);  
 
-    /*****************************KLIENT 4*************************************/
+    /*****************************KLIENT 1*************************************/
     
-    if (pid1 == 0 && 0 == pid2)
+    if (pid1 > 0 && 0 < pid2)
     {
-        read(fd4[0],buf,100);
-        cislo_klienta = 4;
+        read(fd1[0],buf,100);
+        cislo_klienta = 1;
         printf("\n%s %d\n",meno, cislo_klienta);
           
     }
@@ -89,12 +89,12 @@ int main()
         //client.sin_port = htons(6836);
     }
 
-    /********************************KLIENT 1**********************************/
+    /********************************KLIENT 4**********************************/
 
-    if (pid1 > 0 && 0 < pid2)
+    if  (pid1 == 0 && 0 == pid2)
     {
-        read(fd1[0],buf,100);
-        cislo_klienta = 1;
+        read(fd4[0],buf,100);
+        cislo_klienta = 4;
         printf("\n%s %d\n",meno, cislo_klienta);
         //client.sin_port = htons(6835);
         //sleep(5);
