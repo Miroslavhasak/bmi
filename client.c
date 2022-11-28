@@ -39,10 +39,10 @@ main()
     pid_t pid2 = fork();
 
     
-    //if (pid1 == 0 && 0 == pid2)
+    /*if (pid1 == 0 && 0 == pid2)
     {
         printf("vitaj client1\n");
-    }
+    }*/
 
     /*****************************VYTVORENIE SOCKETU****************************/
     int sock_desc = socket(AF_INET, SOCK_STREAM, 0); 
@@ -161,7 +161,7 @@ main()
 
     while(1) 
     {      
-        printf("Client: ");
+        //printf("Client: ");
         //gets(buf);
 
         len = strlen(buf);
