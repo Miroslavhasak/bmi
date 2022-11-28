@@ -10,6 +10,7 @@ char *body_mass_index(char *buffer) {
     float vyska_cm, vaha, bmi, vyska_m, vyska_2;
     int a = 0, b = 0;
     char odpoved[100] = "Tvoje bmi je: ", cislo[50], ch_vyska[50], ch_hmotnost[50];  
+    
 
     memset(ch_vyska, 0, sizeof(ch_vyska));
     while (buffer[a] != ' ')
@@ -69,7 +70,12 @@ int main()
     float bmi;
     char len;
     char buf[100];  
-    int k;  
+    int k; 
+    /*
+    struct sockaddr_in client1;
+    struct sockaddr_in client2;
+    struct sockaddr_in client3; 
+    */
     
     /*****************************VYTVORENIE SOCKETU***************************/
 
@@ -83,7 +89,7 @@ int main()
         return 0;
     }
 
-    /****************************NASTAVENIE SOCKETU****************************/
+    /****************************NASTAVENIE BIND SOCKETU****************************/
 
     struct sockaddr_in server; 
 
@@ -99,7 +105,7 @@ int main()
         return 0;
     }
 
-    /****************************LISTEN SERVER SOCKET**************************/
+    /****************************SERVER SOCKET**************************/
 
     int listen_socket;
 
@@ -116,15 +122,15 @@ int main()
         return 0;
     }
 
-    
+    socklen_t addr_size;
     
     /*********************************1 CLIENT*****************************/
 
-    sleep(5);
+    
     int client1 = accept(sock_desc, NULL, NULL);  
     if (client1 == -1)
     {
-        printf("cannot accept client!\n");
+        printf("cannot accept client 1\n");
         close(sock_desc);  
         return 0;
     }
@@ -135,7 +141,7 @@ int main()
     int client2 = accept(sock_desc, NULL, NULL);  
     if (client2 == -1)
     {
-        printf("cannot accept client!\n");
+        printf("cannot accept client 2\n");
         close(client1);
         close(sock_desc);
         return 0;
@@ -147,7 +153,7 @@ int main()
     int client3 = accept(sock_desc, NULL, NULL);  
     if (client3 == -1)
     {
-        printf("cannot accept client!\n");
+        printf("cannot accept client 3\n");
         close(client1); 
         close(client2);
         close(sock_desc);  
@@ -159,7 +165,7 @@ int main()
     int client4 = accept(sock_desc, NULL, NULL);  
     if (client4 == -1)
     {
-        printf("cannot accept client!\n");
+        printf("cannot accept client 4\n");
         close(client1);
         close(client2); 
         close(client3); 
@@ -196,11 +202,11 @@ int main()
     }
     */
 
-	printf("Client sa pripojil\n");
+	printf("Clienti sa pripojil\n");
 
     pid_t pid1 = fork();
     pid_t pid2 = fork();
-        
+    
     /***********************************CLIENT 1********************************/
     
     if (pid1 == 0 && 0 == pid2)

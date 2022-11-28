@@ -6,7 +6,7 @@
 #include <arpa/inet.h> 
 #include <unistd.h> 
 
-main() 
+int main() 
 {  
     char buf[100];
     char b1[100];
@@ -59,19 +59,19 @@ main()
     client.sin_addr.s_addr = inet_addr("127.0.0.1");
     client.sin_port = htons(6838);  
 
-    /*****************************KLIENT 1*************************************/
+    /*****************************KLIENT 4*************************************/
     
     if (pid1 == 0 && 0 == pid2)
     {
-        read(fd1[0],buf,100);
-        cislo_klienta = 1;
+        read(fd4[0],buf,100);
+        cislo_klienta = 4;
         printf("\n%s %d\n",meno, cislo_klienta);
           
     }
 
     /******************************KLIENT 2************************************/
 
-    if (pid1 > 0 && 0 == pid2)
+    if (pid1 == 0 && 0 < pid2)
     {
         read(fd2[0],buf,100);
         cislo_klienta = 2;
@@ -81,7 +81,7 @@ main()
 
     /*******************************KLIENT 3***********************************/
     
-    if (pid1 == 0 && 0 < pid2)
+    if (pid1 > 0 && 0 == pid2)
     {
         read(fd3[0],buf,100);
         cislo_klienta = 3;
@@ -89,14 +89,15 @@ main()
         //client.sin_port = htons(6836);
     }
 
-    /********************************KLIENT 4**********************************/
+    /********************************KLIENT 1**********************************/
 
     if (pid1 > 0 && 0 < pid2)
     {
-        read(fd4[0],buf,100);
-        cislo_klienta = 4;
+        read(fd1[0],buf,100);
+        cislo_klienta = 1;
         printf("\n%s %d\n",meno, cislo_klienta);
         //client.sin_port = htons(6835);
+        //sleep(5);
     }
 
     /******************************PRIPOJENIE SOCKETU*************************/
@@ -106,7 +107,12 @@ main()
         printf("cannot connect to server!\n");
         close(sock_desc);
     }
+    printf("\nconnected\n");
 
+    if (pid1 > 0 && 0 < pid2)
+    {
+        wait(NULL);
+    }
     /*
     int Second_sock_desc = socket(AF_INET, SOCK_STREAM, 0);
     if (Second_sock_desc == -1)
@@ -203,12 +209,14 @@ main()
         }
 
         if (k > 0)          //tu je vystup
-            printf("Server: %*.*s", k, k, buf); 
+            printf("Server: pre klienta %d %s", cislo_klienta, buf); 
+
         if (strcmp(buf, "exit") == 0)
             break;
 
     break;
     }
+
 
  
 
