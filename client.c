@@ -6,24 +6,29 @@
 #include <arpa/inet.h> 
 #include <unistd.h> 
 
+/*******************************GLOBALNE PREMENNE***********************/
+char buf[100];
+char b1[100];
+char b2[100];
+char b3[100];
+char b4[100];
+char meno[] = "Som klient";
+int cislo_klienta;
+
+int fd1[2];
+int fd2[2];
+int fd3[2];
+int fd4[2];
+
 int main() 
 {  
-    char buf[100];
-    char b1[100];
-    char b2[100];
-    char b3[100];
-    char b4[100];
-    char meno[] = "Som klient";
-    int cislo_klienta;
+    
     gets(b1);
     gets(b2);
     gets(b3);
     gets(b4);
 
-    int fd1[2];
-    int fd2[2];
-    int fd3[2];
-    int fd4[2];
+    
 
     pipe(fd1);
     pipe(fd2);
