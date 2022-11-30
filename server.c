@@ -8,11 +8,18 @@
 #include <signal.h>
 #include <time.h>
 
+/*****************GLOBALNE PREMENNE************/
+
+float vyska_cm, vaha, bmi, vyska_m, vyska_2;
+int a = 0, b = 0;
+char odpoved[100] = "Tvoje bmi je: ", cislo[50], ch_vyska[50], ch_hmotnost[50];  
+    
+
 char *body_mass_index(char *buffer) {
-    float vyska_cm, vaha, bmi, vyska_m, vyska_2;
+    /*float vyska_cm, vaha, bmi, vyska_m, vyska_2;
     int a = 0, b = 0;
     char odpoved[100] = "Tvoje bmi je: ", cislo[50], ch_vyska[50], ch_hmotnost[50];  
-    
+    */
 
     memset(ch_vyska, 0, sizeof(ch_vyska));
     while (buffer[a] != ' ')
@@ -464,7 +471,6 @@ int main()
     close(client3);
     close(client4);
     close(sock_desc);  
-    //close(Second_sock_desc);  
-    printf("server disconnected\n");
+    //printf("server disconnected\n");
     return 0;  
 }

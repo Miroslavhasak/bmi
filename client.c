@@ -8,21 +8,23 @@
 #include <unistd.h> 
 #include <semaphore.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /*******************************GLOBALNE PREMENNE***********************/
 
 
 void *thread_function(void *arg)
 {
-    printf("Test\n\n");
+    printf("Test thread function\n\n");
 }
-/*
+
 timer_t vytvorCasovac(int);
 void spustiCasovac(timer_t, int);
-*/
 
 
-int main() 
+
+int main(void) 
 {  
     char buf[100];
     char b1[100];
@@ -65,11 +67,11 @@ int main()
    */
    
 
-    /*
+    
     timer_t casovac;
     casovac=vytvorCasovac(SIGKILL); //sigkill je to co posiela
     spustiCasovac(casovac,10);  //10 je kolko casu
-    */
+    
 
     pipe(fd1);
     pipe(fd2);
@@ -117,7 +119,17 @@ int main()
     }
 
 
-
+     printf("semafor funguje\n");
+    //while(strncmp("end", work_area, 3) != 0) {		//string compare
+        //fgets(work_area, WORK_SIZE, stdin);
+        sem_post(&bin_sem);		//prida mu hodnotu takze je jedna
+    //}
+    //printf("\nWaiting for thread to finish...\n");
+    res = pthread_join(a_thread, &thread_result);
+    if (res != 0) {
+        perror("Thread join failed");
+        exit(EXIT_FAILURE);
+    }
     
 
 
@@ -191,6 +203,7 @@ int main()
 
     if (pid1 > 0 && 0 < pid2)
     {
+        printf("\nneviem\n");
         wait(NULL);
     }
     /*
@@ -309,11 +322,11 @@ int main()
 
     return 0;  
 }
-/*
+
 timer_t vytvorCasovac(int signal)
 {
   struct sigevent kam;              //struktura na signal
-  kam.sigev_notify=SIGEV_SIGNAL;    //
+  kam.sigev_notify=SIGEV_SIGNAL;    
   kam.sigev_signo=signal;
   
   timer_t casovac;
@@ -330,4 +343,3 @@ void spustiCasovac(timer_t casovac, int sekundy)
   casik.it_interval.tv_nsec=0;
   timer_settime(casovac,CLOCK_REALTIME,&casik,NULL);  //funkcia ktora mi nastavi cas
 }
-*/
