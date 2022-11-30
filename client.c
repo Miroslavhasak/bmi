@@ -10,39 +10,66 @@
 #include <pthread.h>
 
 /*******************************GLOBALNE PREMENNE***********************/
-char buf[100];
-char b1[100];
-char b2[100];
-char b3[100];
-char b4[100];
-char meno[] = "Som klient";
-int cislo_klienta;
-
-int fd1[2];
-int fd2[2];
-int fd3[2];
-int fd4[2];
 
 
 void *thread_function(void *arg)
 {
     printf("Test\n\n");
 }
+/*
 timer_t vytvorCasovac(int);
 void spustiCasovac(timer_t, int);
+*/
 
 
 int main() 
 {  
+    char buf[100];
+    char b1[100];
+    char b2[100];
+    char b3[100];
+    char b4[100];
+    char meno[] = "Som klient";
+    int cislo_klienta;
+
+    int fd1[2];
+    int fd2[2];
+    int fd3[2];
+    int fd4[2];
+
     
     fgets(b1,100,stdin);
     fgets(b2,100,stdin);
     fgets(b3,100,stdin);
     fgets(b4,100,stdin);
 
+    /*
+    printf("%s\n",b1);
+    printf("%s\n",b2);
+    printf("%s\n",b3);
+    printf("%s\n",b4);
+    */
+
+    
+    
+    /*
+    gets(b1);
+    gets(b2);
+    gets(b3);
+    gets(b4);
+    
+   b1[100] = "180 70";
+   b2[100] = "180 60";
+   b3[100] = "180 50";
+   b4 = "180 40";
+   */
+   
+
+    /*
     timer_t casovac;
     casovac=vytvorCasovac(SIGKILL); //sigkill je to co posiela
     spustiCasovac(casovac,10);  //10 je kolko casu
+    */
 
     pipe(fd1);
     pipe(fd2);
@@ -91,8 +118,7 @@ int main()
 
 
 
-    sem_destroy(&bin_sem);		//zmaze semafor
-    exit(EXIT_SUCCESS);
+    
 
 
 
@@ -236,8 +262,8 @@ int main()
                 break;
             }
 
-            //p_buf += k;
-            //len -= k;
+            p_buf += k;
+            len -= k;
         }
 
         k = send(sock_desc, &c, 1, 0);      
@@ -247,8 +273,9 @@ int main()
             break;
         }
 
-        if (strcmp(buf, "exit") == 0)          
+        if (strcmp(buf, "exit\n") == 0)          
             break;  
+
 	    k = recv(sock_desc, buf, 100, 0);      
         if (k == -1)
         {
@@ -265,7 +292,7 @@ int main()
         if (k > 0)          //tu je vystup
             printf("Server: pre klienta %d %s", cislo_klienta, buf); 
 
-        if (strcmp(buf, "exit") == 0)
+        if (strcmp(buf, "exit\n") == 0)
             break;
 
     break;
@@ -277,9 +304,12 @@ int main()
     close(sock_desc);  // zatvorenie socketu
     printf("client disconnected\n");
 
+    sem_destroy(&bin_sem);		//zmaze semafor
+    exit(EXIT_SUCCESS);
+
     return 0;  
 }
-
+/*
 timer_t vytvorCasovac(int signal)
 {
   struct sigevent kam;              //struktura na signal
@@ -300,3 +330,4 @@ void spustiCasovac(timer_t casovac, int sekundy)
   casik.it_interval.tv_nsec=0;
   timer_settime(casovac,CLOCK_REALTIME,&casik,NULL);  //funkcia ktora mi nastavi cas
 }
+*/
