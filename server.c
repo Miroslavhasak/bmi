@@ -9,7 +9,7 @@
 #include <time.h>
 #include <sys/wait.h>
 
-/*****************GLOBALNE PREMENNE************/
+/************************************GLOBALNE PREMENNE*************************/
 
 float vyska_cm, vaha, bmi, vyska_m, vyska_2;
 int a = 0, b = 0;
@@ -45,7 +45,6 @@ char *body_mass_index(char *buffer) {
     
     //vypocet bmi
     bmi = (vaha)/(vyska_2);
-    //printf("\nbmi je>%f",bmi);
 
     memset(buffer, 0, sizeof(buffer));
     memset(ch_hmotnost, 0, sizeof(ch_hmotnost));
@@ -58,7 +57,7 @@ char *body_mass_index(char *buffer) {
     
     return buffer;
 }
-        /***********SIGNAL****************/
+    /**********************************SIGNAL***********************************/
 
     void sig_handler(int signo)
     {
@@ -204,13 +203,11 @@ int main()
         if (k > 0)          //tu je vystup
             printf("Client: %*.*s", k, k, buf);
             save_buffer = body_mass_index(buf);
-            //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
             kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
-    //gets(buf);
 
         len = strlen(save_buffer);
         p_buf = save_buffer;
@@ -268,13 +265,11 @@ int main()
         if (k > 0)          //tu je vystup
             printf("Client: %*.*s", k, k, buf);
             save_buffer = body_mass_index(buf);
-            //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
             kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
-    //gets(buf);
 
         len = strlen(save_buffer);
         p_buf = save_buffer;
@@ -331,13 +326,11 @@ int main()
         if (k > 0)          //tu je vystup
             printf("Client: %*.*s", k, k, buf);
             save_buffer = body_mass_index(buf);
-            //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
             kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
-    //gets(buf);
 
         len = strlen(save_buffer);
         p_buf = save_buffer;
@@ -392,13 +385,11 @@ int main()
         if (k > 0)          //tu je vystup
             printf("Client: %*.*s", k, k, buf);
             save_buffer = body_mass_index(buf);
-            //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
             kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
-    //gets(buf);
 
         len = strlen(save_buffer);
         p_buf = save_buffer;
@@ -437,6 +428,5 @@ int main()
     close(client3);
     close(client4);
     close(sock_desc);  
-    //printf("server disconnected\n");
     kill(getpid(),SIGUSR1);  
 }

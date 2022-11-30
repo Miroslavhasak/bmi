@@ -13,8 +13,6 @@
 
 /*******************************GLOBALNE PREMENNE***********************/
 
-
-
 int main(void) 
 {  
     char buf[100];
@@ -29,14 +27,11 @@ int main(void)
     int fd2[2];
     int fd3[2];
     int fd4[2];
-
     
     fgets(b1,100,stdin);
     fgets(b2,100,stdin);
     fgets(b3,100,stdin);
     fgets(b4,100,stdin);
-
-    
 
     pipe(fd1);
     pipe(fd2);
