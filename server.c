@@ -7,6 +7,7 @@
 #include <unistd.h> 
 #include <signal.h>
 #include <time.h>
+#include <sys/wait.h>
 
 /*****************GLOBALNE PREMENNE************/
 
@@ -16,10 +17,7 @@ char odpoved[100] = "Tvoje bmi je: ", cislo[50], ch_vyska[50], ch_hmotnost[50];
     
 
 char *body_mass_index(char *buffer) {
-    /*float vyska_cm, vaha, bmi, vyska_m, vyska_2;
-    int a = 0, b = 0;
-    char odpoved[100] = "Tvoje bmi je: ", cislo[50], ch_vyska[50], ch_hmotnost[50];  
-    */
+    
 
     memset(ch_vyska, 0, sizeof(ch_vyska));
     while (buffer[a] != ' ')
@@ -38,21 +36,13 @@ char *body_mass_index(char *buffer) {
     vyska_cm = atof(ch_vyska);       //atof premiena zo stringu na double 
     vaha = atof(ch_hmotnost);       //premenim si z charu na float
 
-    /*
-    printf("\nvyska_cm je>%f",vyska_cm);
-    printf("\nvaha je>%f",vaha);
-    printf("\nch_vyska je>%s",ch_vyska);
-    printf("\nch_hmotnost je>%s",ch_hmotnost);
-
-    printf("Zadaj tvoju vysku v cm a vahu v kg dodrz poradie!!!: \n");
-    */
+   
     //premena vysky z cm na m
     vyska_m = vyska_cm / 100.00;
-    //printf("\nupravena ultra gbiga vyska_m je>%f",vyska_m);
 
     //vyska na druhu
     vyska_2 = vyska_m * vyska_m;
-    //printf("\nvyska_2 je>%f",vyska_2);
+    
     //vypocet bmi
     bmi = (vaha)/(vyska_2);
     //printf("\nbmi je>%f",bmi);
@@ -65,13 +55,17 @@ char *body_mass_index(char *buffer) {
     strcpy(buffer, odpoved);
     strcat(buffer, cislo);
 
-    /*
-    printf("\nodpoved vo funkcii je: %s", odpoved);
-    printf("\ncislo vo funkcii je: %s", cislo);*/
-    //printf("\nbuffer vo funkcii je: %s\n", buffer);
     
     return buffer;
 }
+        /***********SIGNAL****************/
+
+    void sig_handler(int signo)
+    {
+    if (signo == SIGUSR1)
+        printf("Ukoncujem server\n");
+        exit(0);
+    }
 
 int main() 
 {  
@@ -80,11 +74,9 @@ int main()
     char len;
     char buf[100];  
     int k; 
-    /*
-    struct sockaddr_in client1;
-    struct sockaddr_in client2;
-    struct sockaddr_in client3; 
-    */
+
+   if (signal(SIGUSR1, sig_handler) == SIG_ERR)
+    printf("\nsigint error\n");
     
     /*****************************VYTVORENIE SOCKETU***************************/
 
@@ -182,34 +174,6 @@ int main()
         return 0;
     }
 
-    /*
-    sleep(1);
-    
-	int Second_sock_desc = socket(AF_INET, SOCK_STREAM, 0); 
-    if (Second_sock_desc == -1)
-    {
-        printf("cannot create socket!\n");
-        return 0;
-    }
-
-    */
-    /******************************NASTAVENIE SOCKETU**************************/
-    /*
-    struct sockaddr_in Second_client;  
-    memset(&Second_client, 0, sizeof(Second_client));  
-    Second_client.sin_family = AF_INET;  
-    Second_client.sin_addr.s_addr = inet_addr("127.0.0.1");  
-    Second_client.sin_port = htons(16838);  
-    */
-
-    /********************************PRIPOJENIE SOCKETU************************/
-    /*
-    if (connect(Second_sock_desc, (struct sockaddr*)&Second_client, sizeof(Second_client)) != 0)
-    {
-        printf("cannot connect to server!\n");
-        close(Second_sock_desc);
-    }
-    */
 
 	printf("Clienti sa pripojil\n");
 
@@ -225,7 +189,7 @@ int main()
     {    
         k = recv(client1, buf, 100, 0);
 
-        if (recv == -1)
+        if (k == -1)
         {
             printf("\ncannot read from client!\n");
             break;
@@ -243,7 +207,7 @@ int main()
             //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
-            break;     
+            kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
     //gets(buf);
@@ -274,7 +238,7 @@ int main()
         
 
         if (strcmp(buf, "exit") == 0)          
-            break;  
+            kill(getpid(),SIGUSR1);   
         
     break;
     }
@@ -289,7 +253,7 @@ int main()
     {    
         k = recv(client2, buf, 100, 0);
         
-        if (recv == -1)
+        if (k == -1)
         {
             printf("\ncannot read from client!\n");
             break;
@@ -307,7 +271,7 @@ int main()
             //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
-            break;     
+            kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
     //gets(buf);
@@ -338,7 +302,7 @@ int main()
         
 
         if (strcmp(buf, "exit") == 0)          
-            break; 
+            kill(getpid(),SIGUSR1);   
     break;
     }
     }
@@ -352,7 +316,7 @@ int main()
     {    
         k = recv(client3, buf, 100, 0);
         
-        if (recv == -1)
+        if (k == -1)
         {
             printf("\ncannot read from client!\n");
             break;
@@ -370,7 +334,7 @@ int main()
             //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
-            break;     
+            kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
     //gets(buf);
@@ -399,7 +363,7 @@ int main()
         }
         
         if (strcmp(buf, "exit") == 0)          
-            break;  
+            kill(getpid(),SIGUSR1);    
     break;
     }
     }
@@ -413,7 +377,7 @@ int main()
     {    
         k = recv(client4, buf, 100, 0);
         
-        if (recv == -1)
+        if (k == -1)
         {
             printf("\ncannot read from client!\n");
             break;
@@ -431,7 +395,7 @@ int main()
             //printf("\nmuhahah buffer je: %s ", save_buffer);
 
         if (strcmp(buf, "exit") == 0)         
-            break;     
+            kill(getpid(),SIGUSR1);      
 	
 	printf("Server: ");
     //gets(buf);
@@ -466,11 +430,13 @@ int main()
     }
     }
 
+    waitpid(pid1,NULL,0);
+    waitpid(pid2,NULL,0);
     close(client1);  
     close(client2);
     close(client3);
     close(client4);
     close(sock_desc);  
     //printf("server disconnected\n");
-    return 0;  
+    kill(getpid(),SIGUSR1);  
 }
