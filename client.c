@@ -3,6 +3,7 @@
 #include <stdio.h>  
 #include <string.h>  
 #include <stdlib.h> 
+#include <signal.h>
 #include <arpa/inet.h> 
 #include <unistd.h> 
 #include <semaphore.h>
@@ -23,18 +24,25 @@ int fd3[2];
 int fd4[2];
 
 
-void *thread_function(void *arg);
+void *thread_function(void *arg)
+{
+    printf("Test\n\n");
+}
+timer_t vytvorCasovac(int);
+void spustiCasovac(timer_t, int);
 
 
 int main() 
 {  
     
-    gets(b1);
-    gets(b2);
-    gets(b3);
-    gets(b4);
+    fgets(b1,100,stdin);
+    fgets(b2,100,stdin);
+    fgets(b3,100,stdin);
+    fgets(b4,100,stdin);
 
-    
+    timer_t casovac;
+    casovac=vytvorCasovac(SIGKILL); //sigkill je to co posiela
+    spustiCasovac(casovac,10);  //10 je kolko casu
 
     pipe(fd1);
     pipe(fd2);
@@ -228,8 +236,8 @@ int main()
                 break;
             }
 
-            p_buf += k;
-            len -= k;
+            //p_buf += k;
+            //len -= k;
         }
 
         k = send(sock_desc, &c, 1, 0);      
@@ -242,13 +250,13 @@ int main()
         if (strcmp(buf, "exit") == 0)          
             break;  
 	    k = recv(sock_desc, buf, 100, 0);      
-        if (recv == -1)
+        if (k == -1)
         {
             printf("\ncannot read from client!\n");
             break;
         }
 
-        if (recv == 0)
+        if (k == 0)
         {
             printf("\nclient disconnected.\n");
             break;
@@ -270,4 +278,25 @@ int main()
     printf("client disconnected\n");
 
     return 0;  
+}
+
+timer_t vytvorCasovac(int signal)
+{
+  struct sigevent kam;              //struktura na signal
+  kam.sigev_notify=SIGEV_SIGNAL;    //
+  kam.sigev_signo=signal;
+  
+  timer_t casovac;
+  timer_create(CLOCK_REALTIME, &kam, &casovac);   //vytvori casovac ktori mu priradi aky signal spusta
+  return(casovac); 
+}
+
+void spustiCasovac(timer_t casovac, int sekundy)
+{
+  struct itimerspec casik;
+  casik.it_value.tv_sec=sekundy;  //po kolkych to ma zacat
+  casik.it_value.tv_nsec=0;       
+  casik.it_interval.tv_sec=0;
+  casik.it_interval.tv_nsec=0;
+  timer_settime(casovac,CLOCK_REALTIME,&casik,NULL);  //funkcia ktora mi nastavi cas
 }
