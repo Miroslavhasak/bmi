@@ -5,6 +5,8 @@
 #include <stdlib.h> 
 #include <arpa/inet.h> 
 #include <unistd.h> 
+#include <semaphore.h>
+#include <pthread.h>
 
 /*******************************GLOBALNE PREMENNE***********************/
 char buf[100];
@@ -19,6 +21,10 @@ int fd1[2];
 int fd2[2];
 int fd3[2];
 int fd4[2];
+
+
+void *thread_function(void *arg);
+
 
 int main() 
 {  
@@ -48,6 +54,41 @@ int main()
     {
         printf("vitaj client1\n");
     }*/
+
+
+    pthread_t t1, t2;
+
+    /*****************************VYTVORENIE SEMAFORA***************************/
+
+    
+    sem_t bin_sem;
+ 
+    #define WORK_SIZE 1024
+    char work_area[WORK_SIZE];
+
+    int res;
+    pthread_t a_thread;
+    void *thread_result;
+
+    res = sem_init(&bin_sem, 0, 0); //posledne cislo je hodnota semafora
+    if (res != 0) {
+        perror("Semaphore initialization failed");
+        exit(EXIT_FAILURE);
+    }
+    res = pthread_create(&a_thread, NULL, thread_function, NULL);	//meno thread null ma nezaujima meno funkcie null nezaujima
+    if (res != 0) {
+        perror("Thread creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+
+
+    sem_destroy(&bin_sem);		//zmaze semafor
+    exit(EXIT_SUCCESS);
+
+
+
+
 
     /*****************************VYTVORENIE SOCKETU****************************/
     int sock_desc = socket(AF_INET, SOCK_STREAM, 0); 
